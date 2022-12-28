@@ -1,0 +1,294 @@
+package rent;
+
+import java.util.*;
+
+interface Atm_Interfacemethods
+{
+    void transactions(String opr, String sender, String receiver, int amount);
+    void trans_hist();
+    void withdraw(int amount);
+    void deposit(int amount);
+    void transfer();
+    void quit();
+}
+
+class ATMINT implements Atm_Interfacemethods 
+{
+    private String user_id = "";
+    private int user_pin = 0;
+    private int balance = 0;
+
+    private ArrayList<String> trans_history = new ArrayList<String>();
+
+    public void trans_hist()
+    {
+        if(trans_history.isEmpty())
+        {
+            System.out.println("-------------->Please perform some Transactions to show...........");
+            return;
+        }
+
+        Iterator i = trans_history.iterator();
+        System.out.println();
+        System.out.println("************************************");
+        System.out.println("*    TRANSACTIONS WINDOW           *");
+        System.out.println("************************************");
+        System.out.println();
+                        
+        System.out.println("Oprn\tSender\tRcvr\tAmount\tBalance");
+        while(i.hasNext())
+        {
+            System.out.println(i.next());
+        }
+        System.out.println("\n");
+    }
+    
+    public void transactions(String opr, String sender, String receiver, int amount)
+    {
+        trans_history.add(opr + "\t" + sender + "\t"+ receiver + "\t" + amount + "\t" + this.balance);
+    }
+
+    public void withdraw(int amount)
+    {
+        if(this.balance <= 0 || this.balance - amount < 0)
+        {
+            System.out.println("\n OOps you don't have sufficient Balance to perform this operatoion \n");
+            return ;
+        }
+
+        this.balance -= amount;
+        
+        System.out.println();
+        System.out.println("-----> Money Withdrawn successfully....\n");
+        
+        cur_bal();
+        transactions("W", "Bank", this.user_id, amount);
+    }
+
+    public void deposit(int amount)
+    {
+        this.balance += amount;
+
+        System.out.println("\n-----> Money deposited successfully.....\n");
+
+        cur_bal();
+        transactions("D", this.user_id, "Bank", amount);
+    }
+
+    public void transfer()
+    {
+        Scanner scan = new Scanner(System.in);
+
+        System.out.print("Please enter the transfer amount : ");
+        int amount = scan.nextInt();
+
+        if(this.balance <= 0 || this.balance - amount < 0)
+        {
+            System.out.println("\nOOps you don't have sufficient Balance \n");
+            return;
+        }
+
+        System.out.print("Enter the receipent name inorder to transfer the amount : ");
+        String recp_name = scan.next();
+        
+        this.balance -= amount;
+
+        System.out.println("\n-----Money transfered to " + recp_name + " successfully.....\n");
+
+        cur_bal();
+        transactions("T", this.user_id, recp_name, amount);
+    }
+
+    public void quit()
+    {
+        System.exit(0);
+    }
+    
+    public void get_id_pin_bal()
+    {
+        System.out.println("\nUser : " + this.user_id);
+        System.out.println("Pin : " + this.user_pin);
+        System.out.println("Balance : " + this.balance);
+    }
+
+    public void cur_bal()
+    {
+        System.out.println("\n ----- Your present Balance is : " + this.balance);
+        System.out.println();
+    }
+
+    public void set_id_pin_bal(String user_id, int user_pin, int init_bal)
+    {
+        this.user_id = "";
+        this.user_id += user_id;
+        
+        this.user_pin = user_pin;
+
+        this.balance = init_bal;
+    }
+
+    public int get_pin()
+    {
+        return this.user_pin;
+    }
+}
+
+public class AtmInterface {
+
+    public static void main(String[] args) {
+        
+        ATMINT a = new ATMINT();
+        
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println(" \n----- WELCOME TO ATM INTERFACE -----\n");
+
+        System.out.print("Enter user ID : ");
+        String id = scan.next();
+        System.out.print("Enter Pin : ");
+        int pin = scan.nextInt();
+        
+        System.out.print("Add Money to Bank: ");
+        int init = scan.nextInt();
+
+        a.set_id_pin_bal(id, pin, init);
+
+        int amt, trial = 3;
+        System.out.println();
+        System.out.println("---->User ID and PIN are updated successfully......\n");
+
+        while(true)
+        {
+            System.out.println("1. Withdraw Money");
+            System.out.println("2. Deposit Money");
+            System.out.println("3. Transfer Money");
+            System.out.println("4. Show Transaction History");
+            System.out.println("5. Quit\n");
+                    
+            System.out.println("Enter your choice : ");
+            int select = scan.nextInt();
+
+            if(trial == 0)
+            {
+                System.out.println("----- Your are left with no attempts.................");
+                System.out.println("-----------  Please try again after some time...............");
+                System.out.println(" ---------- Thanks for using our service...............");
+                System.exit(0);
+            }
+
+            switch(select)
+            {
+                case 4:
+                        System.out.println();
+                        System.out.println("************************************");
+                        System.out.println("*    Transaction History Window    *");
+                        System.out.println("************************************");
+                        System.out.println();
+                        
+                        System.out.print("Enter Pin : ");
+                        pin = scan.nextInt();
+
+                        if(pin != a.get_pin())
+                        {
+                            System.out.println("OOps entered wrong pin...!!");
+                            trial--;
+                            System.out.println("Attempts left are  : " + trial);
+                        }
+                        else
+                        {
+                            trial = 3;
+                            a.trans_hist();
+                        }
+                        break;
+                
+                case 1:
+                        System.out.println();
+                        System.out.println("************************************");
+                        System.out.println("*         Withdraw  Window         *");
+                        System.out.println("************************************");
+                        System.out.println();                        
+                        
+                        System.out.print("Enter amount to withdraw : ");
+                        amt = scan.nextInt();
+
+                        System.out.print("Enter Pin : ");
+                        pin = scan.nextInt();
+
+                        if(pin != a.get_pin())
+                        {
+                            System.out.println("You have entered incorrect pin...!!");
+                            trial--;
+                            System.out.println("Attempts left : " + trial);
+                        }
+                        else
+                        {
+                            trial = 3;
+                            a.withdraw(amt);
+                        }
+
+                        break;
+
+                case 2:
+                        System.out.println();
+                        System.out.println("************************************");
+                        System.out.println("*         Deposit  Window          *");
+                        System.out.println("************************************");
+                        System.out.println();
+                        
+                        System.out.print("How much would you like to deposit : ");
+                        amt = scan.nextInt();
+                        
+                        System.out.print("Please enter Pin : ");
+                        pin = scan.nextInt();
+
+                        if(pin != a.get_pin())
+                        {
+                            System.out.println("OOps incorrect pin...!!");
+                            trial--;
+                            System.out.println("Attempts left are : " + trial);
+                        }
+                        else
+                        {
+                            trial = 3;
+                            a.deposit(amt);
+                        }
+                        break;
+
+                case 3:
+                        System.out.println();
+                        System.out.println("************************************");
+                        System.out.println("*         Transfer  Window         *");
+                        System.out.println("************************************");
+                        System.out.println();
+                        
+                        System.out.print("Please enter Pin : ");
+                        pin = scan.nextInt();
+
+                        if(pin != a.get_pin())
+                        {
+                            System.out.println("OOPs incorrect pin...!!");
+                            trial--;
+                            System.out.println("Attempts left are: " + trial);
+                        }
+                        else
+                        {
+                            trial = 3;
+                            a.transfer();
+                        }
+
+                        break;
+
+                case 5:
+                        System.out.println("Thanks for performing a transaction over here.");
+                        System.out.println("Please Visit Again");
+                        System.exit(0);
+                        break;
+                    
+                default:
+                        System.out.println("\n---------- Choose an option from above -----------\n");
+                        break;
+            }
+        }
+
+    }
+}

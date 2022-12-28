@@ -1,0 +1,186 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package rent;
+
+import java.util.*;
+
+/**
+ *
+ * @author DELL
+ */
+
+public class OnlineExam {
+
+Scanner sc1 = new Scanner(System.in);
+HashMap<String,Integer> credentials = new HashMap<String,Integer>();
+
+
+	public void login() {
+	
+                credentials.put("MihirDavda",500100);
+		System.out.println("\n\n        WELCOME TO OUR ONLINE EXAM PORTAL                   ");
+
+        System.out.println("-----------------------------------------------------------------");
+        System.out.println("                Instructions");
+        System.out.println("--> Total 5 questions will be provided ");
+        System.out.println("--> Each question carries 10 marks"); 
+        System.out.println("--> To pass the exam you will have to score 40%");
+        System.out.println("-----------------------------------------------------------------");
+        System.out.println();
+                
+		String u_id;
+		int pwd;
+		System.out.println(" ");
+		System.out.print("Enter USERID : ");
+		u_id = sc1.next();
+		System.out.print("Enter PASWORD : ");
+		pwd = sc1.nextInt();
+		if(credentials.containsKey(u_id) && credentials.get(u_id)==pwd) {
+			System.out.println("\nUSER HAS LOGGED IN SUCCESSFULLY ");
+                       	functions();
+		}
+		else {
+			System.out.println(" PLEASE ENTER VALID USERID AND PASSWORD ");
+			System.out.println("TRY AGAIN");
+				login();
+		}
+	}
+	public void functions() {
+		int choose;
+                System.out.println();
+		System.out.println("Select the below operations:");
+		System.out.println("1.Update Profile and Password");
+		System.out.println("2.Start the Exam");
+		System.out.println("3.Logout");
+		choose = sc1.nextInt();
+		switch(choose) {
+		case 1:
+			credentials=modify();
+			functions();
+			break;
+		case 2:
+			questions();
+			functions();
+			break;
+		case 3:
+			System.exit(0);
+			break;
+		default:
+			System.out.println("PLEASE CHOOSE FROM THE ABOVE ENTRIES");
+		}
+	}
+	public HashMap<String,Integer> modify(){
+		String New_User;
+		int upassword;
+                System.out.println();
+		System.out.println("Welcome to modify Profile");
+		System.out.println("Enter Username");
+		New_User = sc1.next();
+		if(credentials.containsKey(New_User)) {
+		System.out.println("Enter new Password that you to want to modify in your profile");
+		upassword = sc1.nextInt();
+		credentials.replace(New_User, upassword);
+                System.out.println();
+                System.out.println("Password Updated............");
+		}
+		else {
+			System.out.println("User name does not exist.....");
+		}
+		return credentials;
+	}
+public void questions() {
+	long time=System.currentTimeMillis();
+	long endtime=time+30;
+	int total_times=0;
+	int ans,score; 
+        double score1;
+	System.out.println("Now, you can start the exam............");
+
+	
+//Question starts
+	while(System.currentTimeMillis()<endtime) {
+	
+            System.out.println("\nQ.1) Identify the one who plays Cricket ?");
+		System.out.println("(1) Sachin Tendulkar");
+		System.out.println("(2) Cristiano Robert");
+                System.out.println("(3) Robert Paul");
+                System.out.println("(4) Cristiano Ronaldo");
+                System.out.println("Select the correct answer from the above");
+		ans=sc1.nextInt();
+		System.out.println("Submitted");
+		if(ans==1) {
+			total_times++;
+		}
+		
+                System.out.println("\nQ.2)Which planet is near to sun?");
+		System.out.println("(1) Venus");
+		System.out.println("(2) Mars");
+                System.out.println("(3) Saturn");
+                System.out.println("(4) Plutus");
+                System.out.println("Select the correct answer from the above");
+		ans=sc1.nextInt();
+		System.out.println("Submitted");
+		if(ans==4) {
+			total_times++;
+		}
+		
+                System.out.println("\nQ.3)Who is Salman Khan?");
+		System.out.println("(1) Dancer");
+		System.out.println("(2) Actor");
+                System.out.println("(3) Singer");
+                System.out.println("(4) Choreograapher");
+                System.out.println("Select the correct answer from the above");
+		ans=sc1.nextInt();
+		System.out.println("Submitted");
+		if(ans==2) {
+			total_times++;
+		}
+		
+                System.out.println("\nQ.4)What is the color of our flag?");
+		System.out.println("(1) Orange");
+		System.out.println("(2) Green");
+                System.out.println("(3) White");
+                System.out.println("(4) All of the above");
+                System.out.println("Select the correct answer from the above");
+		ans=sc1.nextInt();
+		System.out.println("Submitted");
+		if(ans==4) {
+			total_times++;
+		}
+		
+                System.out.println("\nQ.5)Where is Red Fort Located?");
+		System.out.println("(1) Chennai");
+		System.out.println("(2) Mumbai");
+                System.out.println("(3) Delhi");
+                System.out.println("(4) Kolkata");
+                System.out.println("Select the correct answer from the above");
+		ans=sc1.nextInt();
+		System.out.println("Submitted");
+		if(ans==3) {
+			total_times++;
+		}
+		break;
+	}
+        System.out.println();
+	System.out.println("Congratulations you have ompleted the exam.....");
+        System.out.println();
+        score= total_times*10; 
+        score1 = score*2;
+	System.out.println("Your total marks are : "+score+" out of 50 and total percentage is: " +score1+ "%");	
+        
+        if(score1>40 || score1 == 40){
+                System.out.println("Pass");
+        } else {
+                System.out.println("Fail");
+        }
+
+}
+
+public static void main (String[] args)
+{
+	OnlineExam log =new OnlineExam();
+		log.login(); 
+}
+}     

@@ -1,0 +1,150 @@
+package rent;
+
+import java.util.*;
+/**
+ *
+ * @author DELL
+ */
+//public class NumberGuessingGame {
+    
+
+class NumberGuessingGame
+{
+    public long start_game(long sys_gen_num, long sum)
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.println();
+
+        // size : number of attempts
+        int choose = 7, size = 8 , random; 
+
+        while(choose != size)
+        {
+     //       System.out.println("----- Attempt left are  " + choose);
+            System.out.println("Enter a randon number : ");
+            random = sc.nextInt();
+
+            if(choose == 0){
+            System.out.println("No more attempts left");
+            System.exit(0);
+            }
+            
+            if(random == sys_gen_num)
+            {
+                sum =  (size-choose) + sum ;
+                System.out.println("-- Congratulations you won the game ---\n");
+                return sum;
+            }
+            else
+            {
+                if(random < sys_gen_num)
+                {
+                    System.out.println("Enter a  greater number!!\n");
+                }
+                else
+                {
+                    System.out.println("Enter a  smaller number!!\n");
+                }
+            }
+            choose--;
+
+            if(choose == 0){
+            System.out.println("No more attempts left");
+            // ngg.show_history(points, point_table);
+            System.exit(0);
+            }
+         
+         System.out.println(" Attempt left are  " + choose);
+        }   
+        return 0;
+        }
+    
+
+    public void show_history(long points, ArrayList<Long> table)
+    {
+        table.add(points);
+        
+        System.out.println("************** POINTS TABLE **************");       
+        System.out.println("Game round  \t  Points");
+        
+        int total = 0;
+        
+        for(int i = 0; i < table.size(); i++)
+        {
+            total += table.get(i);
+            if(table.get(i) == 0)
+            {
+                total = 0;
+            }
+            System.out.println("   " +(i+1)+ " \t\t   " + table.get(i));    
+        }
+        System.out.println();
+        
+        System.out.println("TOTAL SCORE IS: " + total);
+        System.out.println("******************************************");             
+    }
+
+    public static void main(String[] args) {
+        
+        Scanner scanner = new Scanner(System.in);
+        
+        NumberGuessingGame ngg = new NumberGuessingGame();
+
+        ArrayList<Long> point_table = new ArrayList<Long>();
+
+        long choice, data;
+        String s= "y";
+        System.out.println("\t          NUMBER GUESSING GAME STARTS HERE    ");
+
+        System.out.println("-----------------------------------------------------------------");
+        System.out.println("                Instructions");
+        System.out.println("--> System will generate a random number.");
+        System.out.println("--> Total 7 attempts will be provided ");
+        System.out.println("--> Hints will be provided"); 
+        System.out.println("--> Guessed early to score more");
+        System.out.println("-----------------------------------------------------------------");
+        System.out.println();
+
+        long points = 0;
+
+        while(s.equals("Y") || s.equals("y")  == true)
+        {
+            System.out.println("Do you want to play? Type [ y / n ] || [Y / N]");
+            s = scanner.next();
+    
+            if(s.equals("N") || s.equals("n") == true)
+            {
+                System.out.println("-----------------------------------------------------------------");
+                System.out.println("\t     Please type y or Y to play again....");
+                System.out.println("-----------------------------------------------------------------");
+                System.exit(0);
+            }
+    
+            // generating  a random number 
+            long higherlimit = 11, lowerlimit = 1;
+            long sys_gen_num = Math.round(Math.random() * (higherlimit - lowerlimit + 1) + lowerlimit);
+    
+            System.out.println();
+            System.out.println("************************************");
+            System.out.println("*      Guess a number to win       *");
+            System.out.println("************************************");
+            System.out.println();
+            
+            long status = ngg.start_game(sys_gen_num, points);
+
+            if(status != 0)
+            {
+                System.out.println("----- Congratulations you won the game.........\n");
+                points = status;
+            }
+            else
+            {
+                System.out.println("----- Better luck next time............\n");
+                points = 0;
+            }
+
+            ngg.show_history(points, point_table);
+        }
+    }
+    
+}
